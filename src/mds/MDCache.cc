@@ -11864,6 +11864,12 @@ void MDCache::rollback_uncommitted_fragment(dirfrag_t basedirfrag, list<frag_t>&
     if (!uf.old_frags.empty()) {
       uf.old_frags.swap(old_frags);
       uf.committed = true;
+      if (uf.complete) {
+	assert(uf.bits > 0 && basedirfrag.frag == frag_t());
+	CDir *dir = get_dirfrag(basedirfrag);
+	if (dir)
+	  dir->mark_complete();
+      }
     } else {
       uf.ls->uncommitted_fragments.erase(basedirfrag);
       uncommitted_fragments.erase(it);
@@ -11938,7 +11944,7 @@ void MDCache::rollback_uncommitted_fragments()
 
 	le->add_orig_frag(dir->get_frag());
 	le->metablob.add_dir_context(dir);
-	le->metablob.add_dir(dir, true, uf.complete);
+	le->metablob.add_dir(dir, true);
       }
     }
 
