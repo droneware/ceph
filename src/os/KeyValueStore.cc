@@ -675,8 +675,10 @@ int KeyValueStore::read_fsid(int fd, uuid_d *uuid)
     return ret;
   if (ret == 8) {
     // old 64-bit fsid... mirror it.
-    *(uint64_t*)&uuid->uuid[0] = *(uint64_t*)fsid_str;
-    *(uint64_t*)&uuid->uuid[8] = *(uint64_t*)fsid_str;
+    unsigned char uuid_data[16];
+    *(uint64_t*)&uuid_data[0] = *(uint64_t*)fsid_str;
+    *(uint64_t*)&uuid_data[8] = *(uint64_t*)fsid_str;
+    memcpy(&uuid->uuid, uuid_data, 16);
     return 0;
   }
 
