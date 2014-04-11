@@ -135,7 +135,10 @@ public:
     }
 
     uint64_t get_fsid64() {
-      return *(uint64_t*)&fsid.uuid[0];
+      uint64_t fsid64 = 0;
+      for (int i=0; i<8; ++i)
+	fsid64 = (fsid64 << 8) | fsid.uuid.data[i];
+      return fsid64;
     }
 
     void encode(bufferlist& bl) const {
@@ -163,8 +166,10 @@ public:
 	flags = 0;
 	uint64_t tfsid;
 	::decode(tfsid, bl);
-	*(uint64_t*)&fsid.uuid[0] = tfsid;
-	*(uint64_t*)&fsid.uuid[8] = tfsid;
+	unsigned char uuid_data[16];
+	*(uint64_t*)&uuid_data[0] = tfsid;
+	*(uint64_t*)&uuid_data[8] = tfsid;
+	memcpy(&fsid.uuid, uuid_data, 16);
 	::decode(block_size, bl);
 	::decode(alignment, bl);
 	::decode(max_size, bl);

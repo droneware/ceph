@@ -7,32 +7,35 @@
 
 #include "encoding.h"
 #include <ostream>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
-extern "C" {
-#include <uuid/uuid.h>
-#include <unistd.h>
-}
+using namespace boost::uuids;
 
 struct uuid_d {
-  uuid_t uuid;
+  boost::uuids::uuid uuid;
 
   uuid_d() {
     memset(&uuid, 0, sizeof(uuid));
   }
 
   bool is_zero() const {
-    return uuid_is_null(uuid);
+    return uuid.is_nil();
   }
 
   void generate_random() {
-    uuid_generate(uuid);
+    uuid = random_generator()();
   }
   
   bool parse(const char *s) {
-    return uuid_parse(s, uuid) == 0;
+    uuid = string_generator()(s);  // memory usage?
+    return true;
   }
   void print(char *s) {
-    return uuid_unparse(uuid, s);
+    std::string str = boost::lexical_cast<std::string>(uuid);
+    memcpy(s, str.c_str(), 37);
   }
   
   void encode(bufferlist& bl) const {
@@ -45,16 +48,14 @@ struct uuid_d {
 WRITE_CLASS_ENCODER(uuid_d)
 
 inline std::ostream& operator<<(std::ostream& out, const uuid_d& u) {
-  char b[37];
-  uuid_unparse(u.uuid, b);
-  return out << b;
+  return out << u.uuid;
 }
 
 inline bool operator==(const uuid_d& l, const uuid_d& r) {
-  return uuid_compare(l.uuid, r.uuid) == 0;
+  return l.uuid == r.uuid;
 }
 inline bool operator!=(const uuid_d& l, const uuid_d& r) {
-  return uuid_compare(l.uuid, r.uuid) != 0;
+  return l.uuid != r.uuid;
 }
 
 
