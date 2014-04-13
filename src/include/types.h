@@ -18,8 +18,6 @@
 #include "int_types.h"
 #include "byteorder.h"
 
-#include "uuid.h"
-
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <string.h>

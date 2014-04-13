@@ -22,6 +22,7 @@ extern struct ceph_file_layout g_default_file_layout;
 #include <map>
 #include <set>
 
+#include "include/uuid.h"
 #include "common/ConfUtils.h"
 #include "common/entity_name.h"
 #include "common/Mutex.h"
