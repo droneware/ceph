@@ -15,6 +15,7 @@
 #ifndef CEPH_CEPHCONTEXT_H
 #define CEPH_CEPHCONTEXT_H
 
+#include <cmath>
 #include <iostream>
 #include <stdint.h>
 
