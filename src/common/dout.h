@@ -45,9 +45,6 @@ inline std::ostream& operator<<(std::ostream& out, _bad_endl_use_dendl_t) {
 #define dout_impl(cct, sub, v)						\
   do {									\
   if (cct->_conf->subsys.should_gather(sub, v)) {			\
-    if (0) {								\
-      char __array[((v >= -1) && (v <= 200)) ? 0 : -1] __attribute__((unused)); \
-    }									\
     ceph::log::Entry *_dout_e = cct->_log->create_entry(v, sub);	\
     ostream _dout_os(&_dout_e->m_streambuf);				\
     CephContext *_dout_cct = cct;					\
