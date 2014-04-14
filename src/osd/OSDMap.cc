@@ -319,7 +319,7 @@ void OSDMap::Incremental::encode_client_old(bufferlist& bl) const
   // for ::encode(old_pools, bl);
   n = old_pools.size();
   ::encode(n, bl);
-  for (set<int64_t>::iterator p = old_pools.begin(); p != old_pools.end(); ++p) {
+  for (set<int64_t>::const_iterator p = old_pools.begin(); p != old_pools.end(); ++p) {
     n = *p;
     ::encode(n, bl);
   }
