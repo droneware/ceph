@@ -9,6 +9,6 @@ void dout_emergency(const char * const str)
 
 void dout_emergency(const std::string &str)
 {
-  std::cerr << str;
+  std::cerr << str.c_str();
   std::cerr.flush();
 }
