@@ -15,7 +15,10 @@
 #ifndef CEPH_CEPHCONTEXT_H
 #define CEPH_CEPHCONTEXT_H
 
+#ifdef XLC
 #include <cmath>
+#endif
+
 #include <iostream>
 #include <stdint.h>
 
