@@ -75,6 +75,29 @@ return 0;
 AC_MSG_RESULT([$CLANG])
 AM_CONDITIONAL(CLANG, test "$CLANG" = "yes")
 
+AC_MSG_CHECKING([for gcc compiler])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+[[
+#if !defined(__GNUC__)
+# error no gcc compiler
+#endif
+]])], [have_gcc=yes], [have_gcc=no])
+AC_MSG_RESULT([$have_gcc])
+
+AM_CONDITIONAL(GCC, test x"$have_gcc" = "xyes")
+
+# detect xlC
+AC_MSG_CHECKING([for xlc compiler])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+[[
+#if !((defined(__IBMC__) || defined(__IBMCPP__)) && defined(__xlC__))
+# error no xlc compiler
+#endif
+]])], [have_xlc=yes], [have_xlc=no])
+AC_MSG_RESULT([$have_xlc])
+
+AM_CONDITIONAL(XLC, test x"$have_xlc" = "xyes")
+
 #AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
