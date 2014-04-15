@@ -861,7 +861,8 @@ int Pipe::connect()
 
   // identify peer
   {
-    bufferptr p(sizeof(paddr) * 2);
+    int wirelen = sizeof(__u32) * 2 + sizeof(ceph_sockaddr_storage);
+    bufferptr p(wirelen * 2);
     addrbl.push_back(p);
   }
   if (tcp_read(addrbl.c_str(), addrbl.length()) < 0) {
@@ -2261,7 +2262,7 @@ int Pipe::tcp_read(char *buf, int len)
 
     len -= got;
     buf += got;
-    //lgeneric_dout(cct, DBL) << "tcp_read got " << got << ", " << len << " left" << dendl;
+    lsubdout(msgr->cct,ms,15) << "tcp_read got  " << got << ", " << len << " left" << dendl;
   }
   return len;
 }
