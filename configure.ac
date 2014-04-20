@@ -510,13 +510,26 @@ AC_ARG_WITH([ocf],
             [with_ocf=no])
 AM_CONDITIONAL(WITH_OCF, [ test "$with_ocf" = "yes" ])
 
-# check is snappy-devel is installed, needed by leveldb
-AC_CHECK_LIB([snappy], [snappy_compress], [], [AC_MSG_FAILURE([libsnappy not found])])
+# use snappy, needed by leveldb
+AC_ARG_WITH([snappy],
+            [AS_HELP_STRING([--without-snappy], [disable snappy lib])],
+            ,
+            [with_snappy=yes])
+AS_IF([test "x$with_snappy" != xno],
+            [AC_CHECK_LIB([snappy], [snappy_compress], [], [AC_MSG_FAILURE([libsnappy not found])])])
+
 # use system leveldb
-AC_CHECK_LIB([leveldb], [leveldb_open], [], [AC_MSG_FAILURE([libleveldb not found])], [-lsnappy -lpthread])
+AC_ARG_WITH([leveldb],
+            [AS_HELP_STRING([--without-leveldb], [disable leveldb])],
+            ,
+            [with_leveldb=yes])
+AS_IF([test "x$with_leveldb" != xno],
+            [AC_CHECK_LIB([leveldb], [leveldb_open], [], [AC_MSG_FAILURE([libleveldb not found])],[-lsnappy -lpthread])])
+
 # see if we can use bloom filters with leveldb
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADER([leveldb/filter_policy.h], [AC_DEFINE([HAVE_LEVELDB_FILTER_POLICY], [1], [Defined if LevelDB supports bloom filters ])])
+AS_IF([test "x$with_leveldb" != xno],
+            [AC_CHECK_HEADER([leveldb/filter_policy.h], [AC_DEFINE([HAVE_LEVELDB_FILTER_POLICY], [1], [Defined if LevelDB supports bloom filters ])])])
 AC_LANG_POP([C++])
 
 # Find supported SIMD / SSE extensions supported by the compiler
