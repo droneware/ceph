@@ -2262,7 +2262,7 @@ int Pipe::tcp_read(char *buf, int len)
 
     len -= got;
     buf += got;
-    lsubdout(msgr->cct,ms,15) << "tcp_read got  " << got << ", " << len << " left" << dendl;
+    lsubdout(msgr->cct, ms, 30) << "tcp_read got  " << got << ", " << len << " left" << dendl;
   }
   return len;
 }
