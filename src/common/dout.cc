@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <string>
 
 void dout_emergency(const char * const str)
 {
@@ -9,6 +10,6 @@ void dout_emergency(const char * const str)
 
 void dout_emergency(const std::string &str)
 {
-  std::cerr << str.c_str();
+  std::cerr << str;
   std::cerr.flush();
 }
