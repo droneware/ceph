@@ -470,14 +470,21 @@ if test "x$enable_cephfs_java" = "xyes"; then
 fi
 AM_CONDITIONAL(HAVE_JUNIT4, [test "$have_junit4" = "1"])
 
-#
-# FreeBSD has it in base.
-#
-if test x"$freebsd" != x"yes"; then
-PKG_CHECK_MODULES([LIBEDIT], [libedit >= 2.11],
+# use libedit 
+AC_ARG_WITH([edit],
+            [AS_HELP_STRING([--without-libedit], [disable libedit])],
+            ,
+            [with_libedit=yes])
+if test x"$with_libedit" != x"no"; then
+    #
+    # FreeBSD has it in base.
+    #
+    if test x"$freebsd" != x"yes"; then
+        PKG_CHECK_MODULES([LIBEDIT], [libedit >= 2.11],
                 [], AC_MSG_FAILURE([No usable version of libedit found.]))
-else
+    else
 	LIBEDIT_LIBS="-ledit"
+    fi
 fi
 
 #libatomic-ops? You want it!
