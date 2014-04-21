@@ -625,29 +625,44 @@ AC_CHECK_HEADER([boost/statechart/state.hpp], [],
 AC_CHECK_HEADER([boost/program_options/option.hpp], [],
     AC_MSG_FAILURE(["Can't find boost program_options headers"]))
 
-# If we have the boost system library installed, then we may want to link
-# with it.
-AC_CHECK_LIB(boost_system-mt, main, [],
-    [AC_CHECK_LIB(boost_system, main, [],
-        AC_MSG_NOTICE(["Boost system library not found."]))])
+saved_LIBS="${LIBS}"
+#
+# Check for the boost system library.
+#
+LIBS="-lboost_system-mt"
+AC_LINK_IFELSE(
+    [AC_LANG_PROGRAM([#include <boost/system/error_code.hpp>],
+        [boost::system::error_code error_code])],
+    [],
+    [AC_MSG_NOTICE(["Boost system library not found."])])
 
-# Find the right boost_thread library.
-AC_CHECK_LIB(boost_thread-mt, main, [],
-    [AC_CHECK_LIB(boost_thread, main, [],
-        AC_MSG_FAILURE(["Boost thread library not found."]))])
+#
+# Check for the boost thread library.
+#
+if test x"$have_xlc" = x"yes"; then
+LIBS="-lboost_thread-mt -lboost_system-mt -lboost_atomic-mt"
+else
+LIBS="-lboost_thread-mt -lboost_system-mt"
+fi
+AC_LINK_IFELSE(
+    [AC_LANG_PROGRAM([#include <boost/thread/thread.hpp>],
+        [boost::thread test_thread])],
+    [],
+    [AC_MSG_FAILURE(["Boost thread library not found."])])
 
 #
 # Check for boost_program_options library (defines BOOST_PROGRAM_OPTIONS_LIBS).
 #
 BOOST_PROGRAM_OPTIONS_LIBS=""
-saved_LIBS="${LIBS}"
-LIBS=""
-AC_CHECK_LIB(boost_program_options-mt, main, [],
-    [AC_CHECK_LIB(boost_program_options, main, [],
-        AC_MSG_FAILURE(["Boost program options library not found."]))])
-BOOST_PROGRAM_OPTIONS_LIBS="${LIBS}"
-LIBS="${saved_LIBS}"
+LIBS="-lboost_program_options-mt"
+AC_LINK_IFELSE(
+    [AC_LANG_PROGRAM([#include <boost/program_options/option.hpp>],
+        [boost::program_options::option test_option])],
+    [BOOST_PROGRAM_OPTIONS_LIBS="${LIBS}"],
+    [AC_MSG_FAILURE(["Boost program options not found."])])
 AC_SUBST(BOOST_PROGRAM_OPTIONS_LIBS)
+
+LIBS="${saved_LIBS}"
 
 AC_LANG([C])
 
