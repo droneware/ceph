@@ -720,9 +720,11 @@ AC_CHECK_MEMBER([struct stat.st_mtimespec.tv_nsec],
     [Define if you have struct stat.st_mtimespec.tv_nsec])])
 
 # splice/tee
-AC_CHECK_FUNC([splice],
+if test x"$linux" = x"yes"; then
+    AC_CHECK_FUNC([splice],
 	[AC_DEFINE([CEPH_HAVE_SPLICE], [], [splice(2) is supported])],
 	[])
+fi
 
 # F_SETPIPE_SZ in fcntl.h
 AC_MSG_CHECKING([for F_SETPIPE_SZ in fcntl.h])
