@@ -471,7 +471,7 @@ fi
 AM_CONDITIONAL(HAVE_JUNIT4, [test "$have_junit4" = "1"])
 
 # use libedit 
-AC_ARG_WITH([edit],
+AC_ARG_WITH([libedit],
             [AS_HELP_STRING([--without-libedit], [disable libedit])],
             ,
             [with_libedit=yes])
