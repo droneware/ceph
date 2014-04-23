@@ -19,7 +19,7 @@ namespace ceph {
 void BackTrace::print(std::ostream& out)
 {
   out << " " << pretty_version_to_str() << std::endl;
-if LINUX
+#ifdef LINUX
   for (size_t i = skip; i < size; i++) {
     //      out << " " << (i-skip+1) << ": " << strings[i] << std::endl;
 

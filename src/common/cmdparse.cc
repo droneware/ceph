@@ -215,12 +215,11 @@ cmd_vartype_stringify(const cmd_vartype &v)
 void
 handle_bad_get(CephContext *cct, string k, const char *tname)
 {
+#ifdef LINUX
   ostringstream errstr;
   int status;
   const char *typestr;
-#ifdef LINUX
   typestr = abi::__cxa_demangle(tname, 0, 0, &status);
-#endif
   if (status != 0) 
     typestr = tname;
   errstr << "bad boost::get: key " << k << " is not type " << typestr;
@@ -232,4 +231,5 @@ handle_bad_get(CephContext *cct, string k, const char *tname)
   lderr(cct) << oss << dendl;
   if (status == 0)
     free((char *)typestr);
+#endif
 }
