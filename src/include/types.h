@@ -82,6 +82,12 @@ typedef off_t loff_t;
 typedef off_t off64_t;
 #endif
 
+// AIX compatibility
+#ifdef _AIX
+typedef long long loff_t;
+typedef long long off64_t;
+#endif
+
 // -- io helpers --
 
 template<class A, class B>

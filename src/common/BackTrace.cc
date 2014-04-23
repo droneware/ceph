@@ -1,6 +1,8 @@
 
 #include <ostream>
+#ifdef LINUX
 #include <cxxabi.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 
@@ -17,6 +19,7 @@ namespace ceph {
 void BackTrace::print(std::ostream& out)
 {
   out << " " << pretty_version_to_str() << std::endl;
+if LINUX
   for (size_t i = skip; i < size; i++) {
     //      out << " " << (i-skip+1) << ": " << strings[i] << std::endl;
 
@@ -44,7 +47,8 @@ void BackTrace::print(std::ostream& out)
       foo[len] = 0;
 
       int status;
-      char *ret = abi::__cxa_demangle(foo, function, &sz, &status);
+      char *ret;
+      ret = abi::__cxa_demangle(foo, function, &sz, &status);
       if (ret) {
 	// return value may be a realloc() of the input
 	function = ret;
@@ -64,6 +68,7 @@ void BackTrace::print(std::ostream& out)
     }
     free(function);
   }
+#endif
 };
 
 }

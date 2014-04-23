@@ -7,7 +7,6 @@ libauth_la_SOURCES = \
 	auth/cephx/CephxAuthorizeHandler.cc \
 	auth/cephx/CephxClientHandler.cc \
 	auth/cephx/CephxProtocol.cc \
-	auth/cephx/CephxServiceHandler.cc \
 	auth/cephx/CephxSessionHandler.cc \
 	auth/cephx/CephxKeyServer.cc \
 	auth/none/AuthNoneAuthorizeHandler.cc \
@@ -15,6 +14,12 @@ libauth_la_SOURCES = \
 	auth/Crypto.cc \
 	auth/KeyRing.cc \
 	auth/RotatingKeyRing.cc
+
+if WITH_LEVELDB
+libauth_la_SOURCES += 
+	auth/cephx/CephxServiceHandler.cc
+endif
+
 noinst_LTLIBRARIES += libauth.la
 
 noinst_HEADERS += \

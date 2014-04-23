@@ -34,6 +34,10 @@
 # endif
 #endif
 
+#if defined(_AIX)
+# define CEPH_BIG_ENDIAN
+#endif
+
 static __inline__ __u16 swab16(__u16 val) 
 {
   return (val >> 8) | (val << 8);

@@ -25,6 +25,8 @@
 #include "common/debug.h"
 #include "common/errno.h"
 
+#include "include/compat.h"
+
 // Below included to get encode_encrypt(); That probably should be in Crypto.h, instead
 
 #include "auth/Crypto.h"

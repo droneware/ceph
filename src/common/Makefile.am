@@ -25,14 +25,12 @@ libcommon_la_SOURCES = \
 	common/MemoryModel.cc \
 	common/armor.c \
 	common/fd.cc \
-	common/xattr.c \
 	common/safe_io.c \
 	common/snap_types.cc \
 	common/str_list.cc \
 	common/str_map.cc \
 	common/errno.cc \
 	common/RefCountedObj.cc \
-	common/blkdev.cc \
 	common/common_init.cc \
 	common/pipe.c \
 	common/ceph_argparse.cc \
@@ -57,32 +55,43 @@ libcommon_la_SOURCES = \
 	common/entity_name.cc \
 	common/ceph_crypto.cc \
 	common/ceph_crypto_cms.cc \
-	common/ceph_json.cc \
-	common/ipaddr.cc \
-	common/pick_address.cc \
 	common/util.cc \
 	common/TextTable.cc \
 	common/ceph_fs.cc \
 	common/ceph_hash.cc \
 	common/ceph_strings.cc \
 	common/ceph_frag.cc \
-	common/addr_parsing.c \
 	common/hobject.cc \
-	common/bloom_filter.cc \
+	common/bloom_filter.cc 
+
+if LINUX
+libcommon_la_SOURCES += \
+	common/xattr.c \
+	common/blkdev.cc \
+	common/ceph_json.cc \
+	common/ipaddr.cc \
+	common/pick_address.cc \
+	common/addr_parsing.c \
 	common/linux_version.c
+endif
 
 # these should go out of libcommon
 libcommon_la_SOURCES += \
-	mon/MonCap.cc \
 	mon/MonClient.cc \
 	mon/MonMap.cc \
 	osd/OSDMap.cc \
 	osd/osd_types.cc \
 	osd/ECMsgTypes.cc \
-	osd/HitSet.cc \
+	osd/HitSet.cc
+
+# and these too
+if LINUX
+libcommon_la_SOURCES += \
+	mon/MonCap.cc \
 	mds/MDSMap.cc \
 	mds/inode_backtrace.cc \
 	mds/mdstypes.cc 
+endif
 
 # inject crc in common
 libcommon_crc_la_SOURCES = \
@@ -109,7 +118,22 @@ noinst_HEADERS += \
 LIBCOMMON_DEPS += \
 	$(LIBERASURE_CODE) \
 	$(LIBMSG) $(LIBAUTH) \
-	$(LIBCRUSH) $(LIBJSON_SPIRIT) $(LIBLOG) $(LIBARCH)
+	$(LIBLOG) $(LIBARCH)
+
+if LINUX
+LIBCOMMON_DEPS += \
+	$(LIBCRUSH) \
+	$(LIBJSON_SPIRIT) 
+endif
+
+if XLC
+libcommon_la_SOURCES += \
+	crush/builder.c \
+	crush/mapper.c \
+	crush/crush.c \
+	crush/hash.c \
+	crush/CrushWrapper.cc 
+endif
 
 if LINUX
 LIBCOMMON_DEPS += -lrt

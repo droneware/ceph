@@ -12,7 +12,9 @@
  *
  */
 
+#ifdef LINUX
 #include <cxxabi.h>
+#endif
 #include "common/cmdparse.h"
 #include "include/str_list.h"
 #include "json_spirit/json_spirit.h"
@@ -215,7 +217,10 @@ handle_bad_get(CephContext *cct, string k, const char *tname)
 {
   ostringstream errstr;
   int status;
-  const char *typestr = abi::__cxa_demangle(tname, 0, 0, &status);
+  const char *typestr;
+#ifdef LINUX
+  typestr = abi::__cxa_demangle(tname, 0, 0, &status);
+#endif
   if (status != 0) 
     typestr = tname;
   errstr << "bad boost::get: key " << k << " is not type " << typestr;
