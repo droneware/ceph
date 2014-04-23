@@ -486,6 +486,7 @@ if test x"$with_libedit" != x"no"; then
 	LIBEDIT_LIBS="-ledit"
     fi
 fi
+AM_CONDITIONAL(WITH_LIBEDIT, [ test "$with_libedit" = "yes" ])
 
 #libatomic-ops? You want it!
 AC_ARG_WITH([libatomic-ops],
@@ -524,6 +525,7 @@ AC_ARG_WITH([snappy],
             [with_snappy=yes])
 AS_IF([test "x$with_snappy" != xno],
             [AC_CHECK_LIB([snappy], [snappy_compress], [], [AC_MSG_FAILURE([libsnappy not found])])])
+AM_CONDITIONAL(WITH_SNAPPY, [ test "$with_snappy" = "yes" ])
 
 # use system leveldb
 AC_ARG_WITH([leveldb],
@@ -532,6 +534,7 @@ AC_ARG_WITH([leveldb],
             [with_leveldb=yes])
 AS_IF([test "x$with_leveldb" != xno],
             [AC_CHECK_LIB([leveldb], [leveldb_open], [], [AC_MSG_FAILURE([libleveldb not found])],[-lsnappy -lpthread])])
+AM_CONDITIONAL(WITH_LEVELDB, [ test "$with_leveldb" = "yes" ])
 
 # see if we can use bloom filters with leveldb
 AC_LANG_PUSH([C++])
