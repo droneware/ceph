@@ -16,8 +16,7 @@ libauth_la_SOURCES = \
 	auth/RotatingKeyRing.cc
 
 if WITH_LEVELDB
-libauth_la_SOURCES += 
-	auth/cephx/CephxServiceHandler.cc
+libauth_la_SOURCES += auth/cephx/CephxServiceHandler.cc
 endif
 
 noinst_LTLIBRARIES += libauth.la

@@ -643,7 +643,7 @@ LIBS="-lboost_system-mt"
 AC_LINK_IFELSE(
     [AC_LANG_PROGRAM([#include <boost/system/error_code.hpp>],
         [boost::system::error_code error_code])],
-    [],
+    [saved_LIBS="${saved_LIBS} ${LIBS}"],
     [AC_MSG_NOTICE(["Boost system library not found."])])
 
 #
@@ -652,12 +652,12 @@ AC_LINK_IFELSE(
 if test x"$have_xlc" = x"yes"; then
 LIBS="-lboost_thread-mt -lboost_system-mt -lboost_atomic-mt"
 else
-LIBS="-lboost_thread-mt -lboost_system-mt"
+LIBS="-lboost_thread-mt"
 fi
 AC_LINK_IFELSE(
     [AC_LANG_PROGRAM([#include <boost/thread/thread.hpp>],
         [boost::thread test_thread])],
-    [],
+    [saved_LIBS="${saved_LIBS} ${LIBS}"],
     [AC_MSG_FAILURE(["Boost thread library not found."])])
 
 #
