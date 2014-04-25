@@ -541,6 +541,4 @@ inline ostream& operator<<(ostream& out, Message& m) {
 extern void encode_message(Message *m, uint64_t features, bufferlist& bl);
 extern Message *decode_message(CephContext *cct, bufferlist::iterator& bl);
 
-extern void translate_errno(Message *m);
-
 #endif
