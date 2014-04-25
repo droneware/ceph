@@ -164,6 +164,10 @@ using namespace std;
 #include "messages/MOSDECSubOpRead.h"
 #include "messages/MOSDECSubOpReadReply.h"
 
+#ifdef AIX
+#include "common/aix_errno.h"
+#endif
+
 #define DEBUGLVL  10    // debug level of output
 
 #define dout_subsys ceph_subsys_ms
@@ -712,6 +716,9 @@ Message *decode_message(CephContext *cct, ceph_msg_header& header, ceph_msg_foot
 
   try {
     m->decode_payload();
+#ifdef AIX
+    translate_aix_errno(m);
+#endif
   }
   catch (const buffer::error &e) {
     if (cct) {
@@ -784,4 +791,3 @@ Message *decode_message(CephContext *cct, bufferlist::iterator& p)
   ::decode(da, p);
   return decode_message(cct, h, f, fr, mi, da);
 }
-

@@ -64,6 +64,11 @@ libcommon_la_SOURCES = \
 	common/hobject.cc \
 	common/bloom_filter.cc 
 
+if AIX
+libcommon_la_SOURCES += \
+	common/aix_errno.cc
+endif
+
 if LINUX
 libcommon_la_SOURCES += \
 	common/xattr.c \
