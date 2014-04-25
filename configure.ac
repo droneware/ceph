@@ -54,9 +54,13 @@ linux*)
 freebsd*)
 	freebsd="yes"
 	;;
+aix*)
+	aix="yes"
+	;;
 esac
 AM_CONDITIONAL(LINUX, test x"$linux" = x"yes")
 AM_CONDITIONAL(FREEBSD, test x"$freebsd" = x"yes")
+AM_CONDITIONAL(AIX, test x"$aix" = x"yes")
 
 # Checks for programs.
 AC_PROG_CXX
