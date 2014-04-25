@@ -235,22 +235,29 @@ __s32 aix_errno_lookup(__s32 e)
 // tanslate errno's from linux values to AIX platform equivalents 
 void translate_aix_errno(Message *m)
 {
-  if (typeid(*m) == typeid(MOSDOpReply)) {
-    MOSDOpReply *t = (MOSDOpReply*)m;
-    t->set_result(aix_errno_lookup(t->get_result()));    
-  } else if (typeid(*m) == typeid(MCommandReply)) {
-    MCommandReply *t = (MCommandReply*)m;
-    t->r = aix_errno_lookup(t->r);
-  } else if (typeid(*m) == typeid(MAuthReply)) {
-    MAuthReply *t = (MAuthReply*)m;
-    t->result = aix_errno_lookup(t->result);
-  } else if (typeid(*m) == typeid(MPoolOpReply)) {
-    MPoolOpReply *t = (MPoolOpReply*)m;
-    t->replyCode = aix_errno_lookup(t->replyCode);
-  } else if (typeid(*m) == typeid(MMonCommandAck)) {
-    MMonCommandAck *t = (MMonCommandAck*)m;
-    t->r = aix_errno_lookup(t->r);   
+  switch (m->get_header().type) {
+    case CEPH_MSG_OSD_OPREPLY: {
+      MOSDOpReply *t = (MOSDOpReply*)m;
+      t->set_result(aix_errno_lookup(t->get_result()));
+      break;
+    }
+    case MSG_COMMAND_REPLY: {
+      MCommandReply *t = (MCommandReply*)m;
+      t->r = aix_errno_lookup(t->r);
+      break;
+    }
+    case CEPH_MSG_AUTH_REPLY: {
+      MAuthReply *t = (MAuthReply*)m;
+      t->result = aix_errno_lookup(t->result);
+      break;
+    }
+    case MSG_MON_COMMAND_ACK: {
+      MMonCommandAck *t = (MMonCommandAck*)m;
+      t->r = aix_errno_lookup(t->r);   
+      break;
+    }
+    default:
+      break;
   }
-
 }
 
