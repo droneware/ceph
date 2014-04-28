@@ -16,12 +16,119 @@
 #include "include/types.h"
 
 #include "msg/Message.h"
-#include "messages/MAuthReply.h"
-#include "messages/MCommandReply.h"
 #include "messages/PaxosServiceMessage.h"
-#include "messages/MPoolOpReply.h"
-#include "messages/MOSDOpReply.h"
+#include "messages/MAuth.h"
+#include "messages/MAuthReply.h"
+#include "messages/MBackfillReserve.h"
+#include "messages/MCacheExpire.h"
+#include "messages/MClientCapRelease.h"
+#include "messages/MClientCaps.h"
+#include "messages/MClientLease.h"
+#include "messages/MClientReconnect.h"
+#include "messages/MClientReply.h"
+#include "messages/MClientRequest.h"
+#include "messages/MClientRequestForward.h"
+#include "messages/MClientSession.h"
+#include "messages/MClientSnap.h"
+#include "messages/MCommand.h"
+#include "messages/MCommandReply.h"
+#include "messages/MDentryLink.h"
+#include "messages/MDentryUnlink.h"
+#include "messages/MDirUpdate.h"
+#include "messages/MDiscover.h"
+#include "messages/MDiscoverReply.h"
+#include "messages/MExportCaps.h"
+#include "messages/MExportCapsAck.h"
+#include "messages/MExportDir.h"
+#include "messages/MExportDirAck.h"
+#include "messages/MExportDirCancel.h"
+#include "messages/MExportDirDiscover.h"
+#include "messages/MExportDirDiscoverAck.h"
+#include "messages/MExportDirFinish.h"
+#include "messages/MExportDirNotify.h"
+#include "messages/MExportDirNotifyAck.h"
+#include "messages/MExportDirPrep.h"
+#include "messages/MExportDirPrepAck.h"
+#include "messages/MForward.h"
+#include "messages/MGenericMessage.h"
+#include "messages/MGetPoolStats.h"
+#include "messages/MGetPoolStatsReply.h"
+#include "messages/MHeartbeat.h"
+#include "messages/MInodeFileCaps.h"
+#include "messages/MLock.h"
+#include "messages/MLog.h"
+#include "messages/MLogAck.h"
+#include "messages/MMDSBeacon.h"
+#include "messages/MMDSCacheRejoin.h"
+#include "messages/MMDSFindIno.h"
+#include "messages/MMDSFindInoReply.h"
+#include "messages/MMDSFragmentNotify.h"
+#include "messages/MMDSLoadTargets.h"
+#include "messages/MMDSMap.h"
+#include "messages/MMDSOpenIno.h"
+#include "messages/MMDSOpenInoReply.h"
+#include "messages/MMDSResolve.h"
+#include "messages/MMDSResolveAck.h"
+#include "messages/MMDSSlaveRequest.h"
+#include "messages/MMDSTableRequest.h"
+#include "messages/MMonCommand.h"
 #include "messages/MMonCommandAck.h"
+#include "messages/MMonElection.h"
+#include "messages/MMonGetMap.h"
+#include "messages/MMonGetVersion.h"
+#include "messages/MMonGetVersionReply.h"
+#include "messages/MMonGlobalID.h"
+#include "messages/MMonHealth.h"
+#include "messages/MMonJoin.h"
+#include "messages/MMonMap.h"
+#include "messages/MMonPaxos.h"
+#include "messages/MMonProbe.h"
+#include "messages/MMonScrub.h"
+#include "messages/MMonSubscribe.h"
+#include "messages/MMonSubscribeAck.h"
+#include "messages/MMonSync.h"
+#include "messages/MOSDAlive.h"
+#include "messages/MOSDBoot.h"
+#include "messages/MOSDECSubOpRead.h"
+#include "messages/MOSDECSubOpReadReply.h"
+#include "messages/MOSDECSubOpWrite.h"
+#include "messages/MOSDECSubOpWriteReply.h"
+#include "messages/MOSDFailure.h"
+#include "messages/MOSDMap.h"
+#include "messages/MOSDMarkMeDown.h"
+#include "messages/MOSDOp.h"
+#include "messages/MOSDOpReply.h"
+#include "messages/MOSDPGBackfill.h"
+#include "messages/MOSDPGCreate.h"
+#include "messages/MOSDPGInfo.h"
+#include "messages/MOSDPGLog.h"
+#include "messages/MOSDPGMissing.h"
+#include "messages/MOSDPGNotify.h"
+#include "messages/MOSDPGPull.h"
+#include "messages/MOSDPGPush.h"
+#include "messages/MOSDPGPushReply.h"
+#include "messages/MOSDPGQuery.h"
+#include "messages/MOSDPGRemove.h"
+#include "messages/MOSDPGScan.h"
+#include "messages/MOSDPGTemp.h"
+#include "messages/MOSDPGTrim.h"
+#include "messages/MOSDPing.h"
+#include "messages/MOSDRepScrub.h"
+#include "messages/MOSDScrub.h"
+#include "messages/MOSDSubOp.h"
+#include "messages/MOSDSubOpReply.h"
+#include "messages/MPGStats.h"
+#include "messages/MPGStatsAck.h"
+#include "messages/MPing.h"
+#include "messages/MPoolOp.h"
+#include "messages/MPoolOpReply.h"
+#include "messages/MRecoveryReserve.h"
+#include "messages/MRemoveSnaps.h"
+#include "messages/MRoute.h"
+#include "messages/MStatfs.h"
+#include "messages/MStatfsReply.h"
+#include "messages/MTimeCheck.h"
+#include "messages/MWatchNotify.h"
 
 
 // converts from linux errno values to aix values
@@ -256,7 +363,114 @@ void translate_aix_errno(Message *m)
       t->r = aix_errno_lookup(t->r);   
       break;
     }
+    case CEPH_MSG_AUTH:
+    case MSG_OSD_BACKFILL_RESERVE:
+    case MSG_MDS_CACHEEXPIRE:
+    case CEPH_MSG_CLIENT_CAPRELEASE:
+    case CEPH_MSG_CLIENT_CAPS:
+    case CEPH_MSG_CLIENT_LEASE:
+    case CEPH_MSG_CLIENT_RECONNECT:
+    case CEPH_MSG_CLIENT_REPLY:
+    case CEPH_MSG_CLIENT_REQUEST:
+    case CEPH_MSG_CLIENT_REQUEST_FORWARD:
+    case CEPH_MSG_CLIENT_SESSION:
+    case CEPH_MSG_CLIENT_SNAP:
+    case MSG_MON_COMMAND:
+    case MSG_MDS_DENTRYLINK:
+    case MSG_MDS_DENTRYUNLINK:
+    case MSG_MDS_DIRUPDATE:
+    case MSG_MDS_DISCOVER:
+    case MSG_MDS_DISCOVERREPLY:
+    case MSG_MDS_EXPORTCAPS:
+    case MSG_MDS_EXPORTCAPSACK:
+    case MSG_MDS_EXPORTDIR:
+    case MSG_MDS_EXPORTDIRACK:
+    case MSG_MDS_EXPORTDIRCANCEL:
+    case MSG_MDS_EXPORTDIRDISCOVER:
+    case MSG_MDS_EXPORTDIRDISCOVERACK:
+    case MSG_MDS_EXPORTDIRFINISH:
+    case MSG_MDS_EXPORTDIRNOTIFY:
+    case MSG_MDS_EXPORTDIRNOTIFYACK:
+    case MSG_MDS_EXPORTDIRPREP:
+    case MSG_MDS_EXPORTDIRPREPACK:
+    case MSG_FORWARD:
+    case MSG_GETPOOLSTATS:
+    case MSG_GETPOOLSTATSREPLY:
+    case MSG_MDS_HEARTBEAT:
+    case MSG_MDS_INODEFILECAPS:
+    case MSG_MDS_LOCK:
+    case MSG_LOG:
+    case MSG_LOGACK:
+    case MSG_MDS_BEACON:
+    case MSG_MDS_CACHEREJOIN:
+    case MSG_MDS_FINDINO:
+    case MSG_MDS_FINDINOREPLY:
+    case MSG_MDS_FRAGMENTNOTIFY:
+    case MSG_MDS_OFFLOAD_TARGETS:
+    case CEPH_MSG_MDS_MAP:
+    case MSG_MDS_OPENINO:
+    case MSG_MDS_OPENINOREPLY:
+    case MSG_MDS_RESOLVE:
+    case MSG_MDS_RESOLVEACK:
+    case MSG_MDS_SLAVE_REQUEST:
+    case MSG_MDS_TABLE_REQUEST:
+    case MSG_MON_ELECTION:
+    case CEPH_MSG_MON_GET_MAP:
+    case CEPH_MSG_MON_GET_VERSION:
+    case CEPH_MSG_MON_GET_VERSION_REPLY:
+    case MSG_MON_GLOBAL_ID:
+    case MSG_MON_HEALTH:
+    case MSG_MON_JOIN:
+    case CEPH_MSG_MON_MAP:
+    case MSG_MON_PAXOS:
+    case MSG_MON_PROBE:
+    case MSG_MON_SCRUB:
+    case CEPH_MSG_MON_SUBSCRIBE:
+    case CEPH_MSG_MON_SUBSCRIBE_ACK:
+    case MSG_MON_SYNC:
+    case MSG_OSD_ALIVE:
+    case MSG_OSD_BOOT:
+    case MSG_OSD_EC_READ:
+    case MSG_OSD_EC_READ_REPLY:
+    case MSG_OSD_EC_WRITE:
+    case MSG_OSD_EC_WRITE_REPLY:
+    case MSG_OSD_FAILURE:
+    case CEPH_MSG_OSD_MAP:
+    case MSG_OSD_MARK_ME_DOWN:
+    case CEPH_MSG_OSD_OP:
+    case MSG_OSD_PG_BACKFILL:
+    case MSG_OSD_PG_CREATE:
+    case MSG_OSD_PG_INFO:
+    case MSG_OSD_PG_LOG:
+    case MSG_OSD_PG_MISSING:
+    case MSG_OSD_PG_NOTIFY:
+    case MSG_OSD_PG_PULL:
+    case MSG_OSD_PG_PUSH:
+    case MSG_OSD_PG_PUSH_REPLY:
+    case MSG_OSD_PG_QUERY:
+    case MSG_OSD_PG_REMOVE:
+    case MSG_OSD_PG_SCAN:
+    case MSG_OSD_PGTEMP:
+    case MSG_OSD_PG_TRIM:
+    case MSG_OSD_PING:
+    case MSG_OSD_REP_SCRUB:
+    case MSG_OSD_SCRUB:
+    case MSG_OSD_SUBOPREPLY:
+    case MSG_PGSTATS:
+    case MSG_PGSTATSACK:
+    case CEPH_MSG_PING:
+    case CEPH_MSG_POOLOP:
+    case MSG_OSD_RECOVERY_RESERVE:
+    case MSG_REMOVE_SNAPS:
+    case MSG_ROUTE:
+    case CEPH_MSG_STATFS:
+    case CEPH_MSG_STATFS_REPLY:
+    case MSG_TIMECHECK:
+    case CEPH_MSG_WATCH_NOTIFY:
+      break;
+
     default:
+      buffer::error();
       break;
   }
 }
