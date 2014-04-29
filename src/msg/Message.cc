@@ -717,7 +717,7 @@ Message *decode_message(CephContext *cct, ceph_msg_header& header, ceph_msg_foot
   try {
     m->decode_payload();
 #ifdef AIX
-    translate_aix_errno(m);
+    translate_aix_errno(cct,m);
 #endif
   }
   catch (const buffer::error &e) {

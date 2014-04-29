@@ -130,6 +130,8 @@
 #include "messages/MTimeCheck.h"
 #include "messages/MWatchNotify.h"
 
+#define dout_subsys ceph_subsys_ms
+
 
 // converts from linux errno values to aix values
 __s32 aix_errno_lookup(__s32 e) 
@@ -340,7 +342,7 @@ __s32 aix_errno_lookup(__s32 e)
 }
 
 // tanslate errno's from linux values to AIX platform equivalents 
-void translate_aix_errno(Message *m)
+void translate_aix_errno(CephContext *cct, Message *m)
 {
   switch (m->get_header().type) {
     case CEPH_MSG_OSD_OPREPLY: {
@@ -460,6 +462,7 @@ void translate_aix_errno(Message *m)
     case MSG_PGSTATSACK:
     case CEPH_MSG_PING:
     case CEPH_MSG_POOLOP:
+    case CEPH_MSG_POOLOP_REPLY:
     case MSG_OSD_RECOVERY_RESERVE:
     case MSG_REMOVE_SNAPS:
     case MSG_ROUTE:
@@ -469,9 +472,19 @@ void translate_aix_errno(Message *m)
     case CEPH_MSG_WATCH_NOTIFY:
       break;
 
-    default:
-      throw buffer::error();
+    default: {
+      if (cct) {
+        lderr(cct) << "failed to decode message of type " << m->get_header().type 
+                   << " v" << m->get_header().version << dendl;
+        ldout(cct, 30) << "dump: \n";
+        m->get_payload().hexdump(*_dout);
+        *_dout << dendl;
+        if (cct->_conf->ms_die_on_bad_msg)
+          assert(0);
+      }
+      m->put();    
       break;
+    }
   }
 }
 
