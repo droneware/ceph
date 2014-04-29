@@ -1,0 +1,50 @@
+Package Name: librados
+Package VRMF: 0.8.0.0
+Update: N
+Fileset
+  Fileset Name: librados.rte
+  Fileset VRMF: 0.8.0.0
+  Fileset Description: The Ceph RADOS client library.
+  Copyright file path: /home/inktank/ceph/COPYING
+  USRLIBLPPFiles
+  EOUSRLIBLPPFiles
+  Bosboot required: N
+  License agreement acceptance required: N
+  Include license files in this package: N
+  Requisites: 
+  USRFiles
+   /usr/lib/librados.so.2
+  EOUSRFiles
+  ROOT Part: N
+  ROOTFiles
+  EOROOTFiles
+  Relocatable: N
+EOFileset
+Fileset
+  Fileset Name: librados.devel
+  Fileset VRMF: 0.8.0.0
+  Fileset Description: The Ceph RADOS client library developer files.
+  Copyright file path: /home/inktank/ceph/COPYING
+  USRLIBLPPFiles
+  EOUSRLIBLPPFiles
+  Bosboot required: N
+  License agreement acceptance required: N
+  Include license files in this package: N
+  Requisites: 
+  USRFiles
+   /usr/include/rados
+   /usr/include/rados/buffer.h
+   /usr/include/rados/crc32c.h
+   /usr/include/rados/librados.h
+   /usr/include/rados/librados.hpp
+   /usr/include/rados/page.h
+   /usr/include/rados/rados_types.h
+   /usr/include/rados/rados_types.hpp
+   /usr/lib/librados.a
+   /usr/lib/librados.la
+  EOUSRFiles
+  ROOT Part: N
+  ROOTFiles
+  EOROOTFiles
+  Relocatable: N
+EOFileset
