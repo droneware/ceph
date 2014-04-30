@@ -42,6 +42,7 @@ Fileset
    /usr/include/rados/rados_types.hpp
    /usr/lib/librados.a
    /usr/lib/librados.la
+   /usr/bin/librados-config
   EOUSRFiles
   ROOT Part: N
   ROOTFiles
