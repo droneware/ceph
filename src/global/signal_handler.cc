@@ -26,7 +26,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#ifdef AIX
 extern char *sys_siglist[];
+#endif
 
 void install_sighandler(int signum, signal_handler_t handler, int flags)
 {
