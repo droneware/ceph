@@ -175,6 +175,7 @@ int global_init_prefork(CephContext *cct, int flags)
   return 0;
 }
 
+#ifdef LINUX
 void global_init_daemonize(CephContext *cct, int flags)
 {
   if (global_init_prefork(cct, flags) < 0)
@@ -191,6 +192,7 @@ void global_init_daemonize(CephContext *cct, int flags)
   global_init_postfork_start(cct);
   global_init_postfork_finish(cct, flags);
 }
+#endif
 
 void global_init_postfork_start(CephContext *cct)
 {

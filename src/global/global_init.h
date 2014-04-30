@@ -67,7 +67,9 @@ void global_init_postfork_finish(CephContext *cct, int flags);
  * Note that this is equivalent to calling _prefork(), daemon(), and
  * _postfork.
  */
+#ifdef LINUX
 void global_init_daemonize(CephContext *cct, int flags);
+#endif
 
 /*
  * global_init_chdir changes the process directory.
