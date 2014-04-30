@@ -26,6 +26,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+extern char *sys_siglist[];
+
 void install_sighandler(int signum, signal_handler_t handler, int flags)
 {
   int ret;
